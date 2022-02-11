@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+  body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 500px;
+  }
+
+  img {
+      width: 300px;
+      height: 300px;
+  }
+
+  .flex {
+      display: flex;
+      align-items: center;
+  }
+
+  h4,
+  h1 {
+      margin-top: 0px !important;
+      margin-bottom: 9px !important;
+  }
+</style>
+    <title>Server Error</title>
+</head>
+
+<body>
+    <div class="" style="max-width: 400px; min-width: 300px;">
+        <img src="/images/server-down.svg" alt="" srcset="">
+        <div class="flex">
+            <h4>Server status:</h4>
+            <h4 style="color: tomato; margin-left: 5px"> Down</h4>
+        </div>
+
+        <div class="flex">
+            <h4>Server message:</h4>
+            <h4 style="color: tomato; margin-left: 5px">
+                <%- errorMessage %>
+            </h4>
+        </div>
+        <div class="flex">
+            <h4>Server Error Stack:</h4>
+        </div>
+        <h4 style="color: tomato; font-size: 14px">
+             <%- errorMessage %> at <%- stack.split(")")[0].split("\\").join('').split('/')[stack.split(")")[0].split("\\").join('').split('/').length-1]; %>
+
+        </h4>
+    </div>
+</body>
+
+</html>

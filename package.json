@@ -1,0 +1,57 @@
+{
+    "name": "Order-Me",
+    "version": "1.0.0",
+    "description": "Order food and drinks from your favorite app",
+    "main": "app.js",
+    "directories": {
+        "test": "test"
+    },
+    "scripts": {
+        "dev": "nodemon app.js",
+        "start": "node app",
+        "test": "mocha -w --recursive test"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/kodecampteam/Order_Me_BE.git"
+    },
+    "keywords": [],
+    "author": "Remilekun Elijah",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/kodecampteam/Order_Me_BE/issues"
+    },
+    "homepage": "https://github.com/kodecampteam/Order_Me_BE#readme",
+    "devDependencies": {
+        "chai": "^4.3.6",
+        "dotenv": "^16.0.0",
+        "mocha": "^9.2.0",
+        "morgan": "^1.10.0",
+        "nodemon": "^2.0.15",
+        "supertest": "^6.2.2"
+    },
+    "dependencies": {
+        "axios": "^0.25.0",
+        "bcrypt": "^5.0.1",
+        "cloudinary": "^1.28.1",
+        "consola": "^2.15.3",
+        "cors": "^2.8.5",
+        "ejs": "^3.1.6",
+        "express": "^4.17.2",
+        "joi": "^17.6.0",
+        "jsonwebtoken": "^8.5.1",
+        "knex": "^0.95.7",
+        "mjml": "^4.12.0",
+        "mongoose": "^6.2.1",
+        "multer": "^1.4.4",
+        "nodemailer": "^6.7.2",
+        "passport": "^0.5.2",
+        "passport-facebook": "^3.0.0",
+        "passport-github2": "^0.1.12",
+        "passport-google-oauth20": "^2.0.0",
+        "passport-linkedin-oauth2": "^2.0.0",
+        "paystack": "^2.0.1",
+        "pg": "^8.7.3",
+        "public-ip": "^5.0.0"
+    }
+}
