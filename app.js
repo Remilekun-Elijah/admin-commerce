@@ -1,13 +1,18 @@
-//jshint esversion:6
+//jshint esversion:8
 const express = require("express");
 const app = express();
 const morgan = require("morgan");
 const config = require("./utils/config");
-const Database = require("./utils/database");
+// const Database = require("./utils/database");
 const cors = require("cors");
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(morgan("dev"));
+/* allow cross origin requests from all origins */
+app.use(cors());
+
 const path = require("path");
 
-new Database().postgresql().checkConnection();
 // import dotenv only in evelopment server
 if (app.get("env") === "development") require("dotenv").config();
 // handles public assets
@@ -15,7 +20,11 @@ app.use(express.static(path.resolve("public")));
 app.set("view engine", "ejs");
 app.set("views", "views");
 
-app.get("/", (req, res) => {
+const route = require("./routes");
+const version = "/api/v1";
+app.use(version, route);
+
+app.get("/", async (req, res) => {
   res.render("index");
 });
 app.get("/orders", (req, res) => {
@@ -45,9 +54,7 @@ app.get("/user-profile", (req, res) => {
 app.get("/product-details", (req, res) => {
   res.render("product-details");
 });
-app.get("/signup", (req, res) => {
-  res.render("signup");
-});
+
 app.get("/signin", (req, res) => {
   res.render("signin");
 });
@@ -55,15 +62,10 @@ app.get("/reset_password", (req, res) => {
   res.render("reset_password");
 });
 
-app.use(express.json());
-app.use(morgan("dev"));
-/* allow cross origin requests from all origins */
-app.use(cors());
 // routes component
-const route = (moduleName) => require(`./modules/${moduleName}/routes`);
 
 // api version
-const version = "/api/v1";
+
 // routes -> for the modules
 // app.use("/", route("sample"));
 // app.use(version, route("sample"));

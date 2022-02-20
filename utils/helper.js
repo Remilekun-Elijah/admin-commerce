@@ -17,11 +17,11 @@ const IV_LENGTH = 16;
  * @returns {string}  the encrypted data in hexadecimal
  */
 exports.encrypt = (data) => {
-    let iv = crypto.randomBytes(IV_LENGTH);
-    let cipher = crypto.createCipheriv("aes-256-cbc", Buffer.from(secret), iv);
-    let encrypted = cipher.update(data.toString());
-    encrypted = Buffer.concat([encrypted, cipher.final()]);
-    return iv.toString("hex") + ":" + encrypted.toString("hex");
+  let iv = crypto.randomBytes(IV_LENGTH);
+  let cipher = crypto.createCipheriv("aes-256-cbc", Buffer.from(secret), iv);
+  let encrypted = cipher.update(data.toString());
+  encrypted = Buffer.concat([encrypted, cipher.final()]);
+  return iv.toString("hex") + ":" + encrypted.toString("hex");
 };
 
 /**
@@ -30,29 +30,29 @@ exports.encrypt = (data) => {
  * @returns {any}  the decrypted data
  */
 exports.decrypt = (value) => {
-    let textParts = value.split(":");
-    let iv = Buffer.from(textParts.shift(), "hex");
-    let encryptedText = Buffer.from(textParts.join(":"), "hex");
-    let decipher = crypto.createDecipheriv(
-        "aes-256-cbc",
-        Buffer.from(secret),
-        iv
-    );
-    let decrypted = decipher.update(encryptedText);
-    decrypted = Buffer.concat([decrypted, decipher.final()]);
-    return decrypted.toString();
+  let textParts = value.split(":");
+  let iv = Buffer.from(textParts.shift(), "hex");
+  let encryptedText = Buffer.from(textParts.join(":"), "hex");
+  let decipher = crypto.createDecipheriv(
+    "aes-256-cbc",
+    Buffer.from(secret),
+    iv
+  );
+  let decrypted = decipher.update(encryptedText);
+  decrypted = Buffer.concat([decrypted, decipher.final()]);
+  return decrypted.toString();
 };
 
-exports.serverErrorHandler = async(err, req, res, next) => {
-    console.log(err.message);
-    res.status(500).render("error", {
-        errorMessage: err.message,
-        stack: err.stack,
-
-    });
+exports.serverErrorHandler = async (err, req, res, next) => {
+  console.log(err.message);
+  res.status(500).render("error", {
+    errorMessage: err.message,
+    stack: err.stack,
+  });
 };
 
-exports.notFoundErrorHandler = async(req, res, next) => res.status(404).render("404", { path: req.path, method: req.method });
+exports.notFoundErrorHandler = async (req, res, next) =>
+  res.status(404).render("404", { path: req.path, method: req.method });
 
 /**
  * @description generates a random string
@@ -65,18 +65,18 @@ exports.generateUuid = () => uuid.v4();
  * @param {number} data.bytes  the actual size of the data/file in byte, default is 50000000
  * @returns  {number}  The size of the data/file
  **/
-exports.getFileSize = function(data = {}) {
-    data.previewInConsole = data.previewInConsole ? data.previewInConsole : false;
-    data.bytes = data.bytes != (undefined || null || "") ? data.bytes : 50000000; // 50mb
-    data.bytes = Number(data.bytes);
-    const k = 1000;
-    const format = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
-    const i = Math.floor(Math.log(data.bytes) / Math.log(k));
-    const size = parseFloat(data.bytes / Math.pow(k, i)).toFixed(2);
+exports.getFileSize = function (data = {}) {
+  data.previewInConsole = data.previewInConsole ? data.previewInConsole : false;
+  data.bytes = data.bytes != (undefined || null || "") ? data.bytes : 50000000; // 50mb
+  data.bytes = Number(data.bytes);
+  const k = 1000;
+  const format = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+  const i = Math.floor(Math.log(data.bytes) / Math.log(k));
+  const size = parseFloat(data.bytes / Math.pow(k, i)).toFixed(2);
 
-    if (data.previewInConsole == true)
-        console.log(data.bytes, " = ", size + format[i]);
-    return size;
+  if (data.previewInConsole == true)
+    console.log(data.bytes, " = ", size + format[i]);
+  return size;
 };
 
 /**
@@ -85,11 +85,11 @@ exports.getFileSize = function(data = {}) {
  * @param {function} cb - the callback function
  */
 exports.deleteFileFrom = (filePath, cb) => {
-    fs.unlink(path.resolve(filePath))
-        .then(cb)
-        .catch((err) => {
-            console.log(err);
-        });
+  fs.unlink(path.resolve(filePath))
+    .then(cb)
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 /**
@@ -99,11 +99,11 @@ exports.deleteFileFrom = (filePath, cb) => {
  * @param {function} cb - the callback function
  */
 exports.moveFile = (from, to, cb) => {
-    fs.rename(path.resolve(from), path.resolve(to))
-        .then(cb)
-        .catch((err) => {
-            throw err;
-        });
+  fs.rename(path.resolve(from), path.resolve(to))
+    .then(cb)
+    .catch((err) => {
+      throw err;
+    });
 };
 
 /**
@@ -120,7 +120,7 @@ exports.hashPassword = (password) => bcrypt.hashSync(password, saltRounds);
  */
 
 exports.comparePassword = (hashedPassword, password) => {
-    return bcrypt.compareSync(password, hashedPassword);
+  return bcrypt.compareSync(password, hashedPassword);
 };
 
 /**
@@ -129,10 +129,9 @@ exports.comparePassword = (hashedPassword, password) => {
  * @param {string} permission - the permission of the user
  * @returns {string} Jwt token plus bearer
  */
-exports.generateUserToken = (id, role) => {
-    let data = { id, role };
-    const token = jwt.sign(data, secret, { expiresIn: "7d" });
-    return `Bearer ${token}`;
+exports.generateUserToken = (data) => {
+  const token = jwt.sign(data, secret, { expiresIn: "7d" });
+  return `Bearer ${token}`;
 };
 
 /**
@@ -140,27 +139,35 @@ exports.generateUserToken = (id, role) => {
  * @param {string} id  - the id of the user
  * @returns {string}  The jwt token plus bearer
  */
-exports.generateRememberedToken = (id) => {
-    const token = jwt.sign({ id }, secret, { expiresIn: "2d" });
-    return `Bearer ${token}`;
+exports.generateRememberedToken = (data) => {
+  const token = jwt.sign(data, secret, { expiresIn: "2d" });
+  return `Bearer ${token}`;
 };
 
 /**
  * @description verifies a jwt token
  * @param {string} token - the token to be verified
- * @returns {any}  the decoded data or an error message
+ * @returns {STRING}  the decoded data or an error message
  */
 exports.verifyToken = (token) => {
-    const token_slice = token.replace(/Bearer/g, "").trim();
-    const decode = jwt.decode(token_slice);
-    var seconds = 1000;
-    var d = new Date();
-    var t = d.getTime();
-    if (decode === "invalid signature") return "invalid_signature";
-    else if (decode.exp < Math.round(t / seconds)) {
-        return "token_expired";
-    } else {
-        const isVerified = jwt.verify(token_slice, secret);
-        return isVerified;
-    }
+  const token_slice = token.replace(/Bearer/g, "").trim();
+  const decode = jwt.decode(token_slice);
+  var seconds = 1000;
+  var d = new Date();
+  var t = d.getTime();
+  if (decode === "invalid signature") return "invalid_signature";
+  else if (decode.exp < Math.round(t / seconds)) {
+    return "token_expired";
+  } else {
+    const isVerified = jwt.verify(token_slice, secret);
+    return isVerified;
+  }
 };
+
+/**
+ * @description gets a module's route by the module's name
+ * @param {string} moduleName - the name of the module
+ * @returns {function} - express route
+ */
+exports.getRoute = (moduleName) =>
+  require(path.resolve("modules", moduleName, "routes"));
